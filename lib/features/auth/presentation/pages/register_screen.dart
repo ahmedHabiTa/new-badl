@@ -9,10 +9,12 @@ import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatelessWidget {
   final String mobile;
+  final String countryID;
 
   RegisterScreen({
     Key? key,
     required this.mobile,
+    required this.countryID,
   }) : super(key: key);
 
   final nameController = TextEditingController();
@@ -139,6 +141,7 @@ class RegisterScreen extends StatelessWidget {
                           await authProvider.register(
                             mobile: mobile,
                             name: nameController.text.toString(),
+                              countryID: countryID,
                             context: context
                           ).then((value){
                             Constants.navigateToRep(

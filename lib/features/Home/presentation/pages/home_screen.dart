@@ -3,6 +3,7 @@ import 'package:badl/core/common_widgets/home__item_card.dart';
 import 'package:badl/features/Home/presentation/widgets/custom_row_texts.dart';
 import 'package:badl/features/Home/presentation/widgets/home_app_bar.dart';
 import 'package:badl/features/Home/presentation/widgets/home_sections.dart';
+import 'package:badl/features/Home/provider/ads_provider.dart';
 import 'package:badl/features/Home/provider/category_provider.dart';
 import 'package:badl/features/auth/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
@@ -56,23 +57,30 @@ class HomeScreen extends StatelessWidget {
               rightText: 'المضاف حديثا',
               leftText: 'الكل',
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 14.0, right: 14.0),
-              child: SizedBox(
-                height: 400.h,
-                child: GridView.builder(
-                    // physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
+            Consumer<AdsProvider>(
+              builder: (context,adProvider,_){
+                return adProvider.isLoading == true ? Container(): Padding(
+                  padding: const EdgeInsets.only(left: 14.0, right: 14.0),
+                  child: SizedBox(
+                    height: 400.h,
+                    child: GridView.builder(
+                      itemCount: adProvider.adDetailsList!.length,
+                      // physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 2 / 2.5,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemBuilder: (context, index) {
-                      return HomeItemCard();
-                    }),
-              ),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2 / 2.5,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          return HomeItemCard(
+                            id:adProvider.adDetailsList![index].id,
+                          );
+                        }),
+                  ),
+                );
+              },
             ),
           ],
         ),

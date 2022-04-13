@@ -2,14 +2,32 @@ import 'package:badl/core/colors.dart';
 import 'package:badl/core/common_widgets/custom_text.dart';
 import 'package:badl/core/common_widgets/custom_text_form_field.dart';
 import 'package:badl/core/common_widgets/custom_wide_buttom.dart';
+import 'package:badl/core/util/shared_pref_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
-class EditProfileScreen extends StatelessWidget {
+import '../../../../core/common_widgets/custom_drop_down_form_field.dart';
+import '../../../../core/common_widgets/loading_widget.dart';
+import '../../../../core/providers/country_provider.dart';
+
+class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
 
   @override
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends State<EditProfileScreen> {
+
+  String? countryCode;
+  String? countryID;
+  @override
   Widget build(BuildContext context) {
+    final username = SharedPrefsHelper.getData(key: 'username');
+    final countryId = SharedPrefsHelper.getData(key: 'userCountryID');
+    final mobile = SharedPrefsHelper.getData(key: 'userMobile');
+    final image = SharedPrefsHelper.getData(key: 'image');
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -54,7 +72,7 @@ class EditProfileScreen extends StatelessWidget {
                   CustomFormField(
                     height: 60.h,
                     hintText: 'الاسم',
-                    initialValue: 'ايلينا احمد هلال',
+                    initialValue: username,
                     prefix: Icon(
                       Icons.person,
                       color: Color(0xFF4a4a4a),
@@ -76,8 +94,9 @@ class EditProfileScreen extends StatelessWidget {
                     children: [
                       CustomFormField(
                         hintText: 'الهاتف المحمول',
+                        initialValue: mobile,
                         width: 253.w,
-                        height: 60.h,
+                        height: 70.h,
                         prefix: Icon(
                           Icons.add_ic_call_outlined,
                           size: 20,
@@ -86,38 +105,58 @@ class EditProfileScreen extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Container(
-                        height: 60.h,
-                        width: 66.w,
-                        decoration: BoxDecoration(
-                          color: MyColors.fieldContainerColors,
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 14.h,
-                                width: 18.w,
-                                child: Image.asset(
-                                  'assets/egypt.png',
-                                  fit: BoxFit.fill,
-                                ),
+                      Consumer<CountryProvider>(
+                        builder: (context, countryProvider, _) {
+                          return countryProvider.isLoading == true
+                              ? const LoadingWidget()
+                              : Container(
+                            height: 70.h,
+                            width: 66.w,
+                            decoration: BoxDecoration(
+                              color: MyColors.fieldContainerColors,
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Center(
+                              child: CustomDropDownFormField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    countryCode = value;
+                                  });
+                                  print(countryCode);
+                                },
+                                title: 'الدوله',
+                                items: countryProvider.countryList!.map(
+                                      (e) {
+                                    return DropdownMenuItem<String>(
+                                      onTap: (){
+                                        setState(() {
+                                          countryID = e.id.toString();
+                                        });
+                                        print(countryID);
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            e.title,
+                                            style: TextStyle(
+                                                fontSize: 12.sp),
+                                          ),
+                                          Text(
+                                            e.code,
+                                            style: TextStyle(
+                                                fontSize: 12.sp),
+                                          ),
+                                        ],
+                                      ),
+                                      value: e.code.toString(),
+                                    );
+                                  },
+                                ).toList(),
                               ),
-                              SizedBox(
-                                width: 5.w,
-                              ),
-                              Text(
-                                '20+',
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       )
                     ],
                   ),

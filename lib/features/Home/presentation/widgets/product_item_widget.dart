@@ -6,7 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductItemWidget extends StatelessWidget {
-  const ProductItemWidget({Key? key}) : super(key: key);
+  final String? title;
+  final String? categoryName;
+
+  const ProductItemWidget({
+    Key? key,
+    this.title,
+    this.categoryName,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +45,7 @@ class ProductItemWidget extends StatelessWidget {
                     children: [
                       SizedBox(width: 10.w),
                       CustomText(
-                        text: 'شاحن سياره متنقل وشاحن متنقل',
+                        text:title ?? 'شاحن سياره متنقل وشاحن متنقل',
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: const Color(0xFF4a4a4a),
@@ -53,7 +60,8 @@ class ProductItemWidget extends StatelessWidget {
                             barrierColor: Colors.black.withOpacity(0.5),
                             transitionDuration: Duration(milliseconds: 700),
                             pageBuilder: (_, __, ___) {
-                              return Dialog(backgroundColor: Colors.transparent,
+                              return Dialog(
+                                backgroundColor: Colors.transparent,
                                 child: Container(
                                   height: 167,
                                   width: 294,
@@ -63,17 +71,17 @@ class ProductItemWidget extends StatelessWidget {
                                   ),
                                   child: Center(
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Container(
                                           height: 65,
                                           width: 65,
                                           decoration: const BoxDecoration(
                                               image: DecorationImage(
-                                                fit: BoxFit.fill,
-                                                image: AssetImage(
-                                                    'assets/sad.png'),
-                                              )),
+                                            fit: BoxFit.fill,
+                                            image: AssetImage('assets/sad.png'),
+                                          )),
                                         ),
                                         const SizedBox(height: 10),
                                         CustomText(
@@ -91,11 +99,11 @@ class ProductItemWidget extends StatelessWidget {
                             transitionBuilder: (_, anim, __, child) {
                               Tween<Offset> tween;
                               if (anim.status == AnimationStatus.reverse) {
-                                tween =
-                                    Tween(begin: Offset(-1, 0), end: Offset.zero);
+                                tween = Tween(
+                                    begin: Offset(-1, 0), end: Offset.zero);
                               } else {
-                                tween =
-                                    Tween(begin: Offset(1, 0), end: Offset.zero);
+                                tween = Tween(
+                                    begin: Offset(1, 0), end: Offset.zero);
                               }
 
                               return SlideTransition(
@@ -128,7 +136,7 @@ class ProductItemWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 25),
                         CustomText(
-                          text: 'القسم',
+                          text:categoryName ?? 'القسم',
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF636363),
@@ -141,7 +149,8 @@ class ProductItemWidget extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Constants.navigateTo(
-                              routeName: ProductDetailsScreen(), context: context);
+                              routeName: ProductDetailsScreen(),
+                              context: context);
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

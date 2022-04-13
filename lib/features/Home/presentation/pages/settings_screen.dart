@@ -1,8 +1,9 @@
-
 import 'package:badl/core/common_widgets/custom_text.dart';
 import 'package:badl/core/constants.dart';
+import 'package:badl/features/auth/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 import 'content_screen.dart';
 import 'edit_profile_screen.dart';
@@ -98,7 +99,11 @@ class SettingsScreen extends StatelessWidget {
                 title: 'الشكاوي والمقترحات',
               ),
               _customSettingItem(
-                onTap: () {},
+                onTap: () {
+                  Provider.of<AuthProvider>(context, listen: false).logout(
+                    context: context,
+                  );
+                },
                 title: 'تسجيل الخروج',
                 isLogout: true,
               ),

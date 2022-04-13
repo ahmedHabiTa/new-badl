@@ -1,4 +1,7 @@
 import 'package:badl/core/common_widgets/custom_text_form_field.dart';
+import 'package:badl/core/common_widgets/loading_widget.dart';
+import 'package:badl/core/providers/country_provider.dart';
+import 'package:badl/core/util/shared_pref_helper.dart';
 import 'package:badl/features/auth/presentation/pages/pincode_screen.dart';
 import 'package:badl/core/colors.dart';
 import 'package:badl/core/constants.dart';
@@ -6,6 +9,8 @@ import 'package:badl/features/auth/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../core/common_widgets/custom_drop_down_form_field.dart';
 
 class PhoneAuthScreen extends StatefulWidget {
   const PhoneAuthScreen({Key? key}) : super(key: key);
@@ -17,11 +22,9 @@ class PhoneAuthScreen extends StatefulWidget {
 class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   final phoneController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<AuthProvider>(context,listen: false).getCountry();
-  }
+
+  String? countryCode;
+  String? countryID;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +98,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                         CustomFormField(
                           controller: phoneController,
                           hintText: 'الهاتف المحمول',
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
                               value = phoneController.text.toString();
                             });
@@ -112,38 +115,58 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                         SizedBox(
                           width: 10,
                         ),
-                        Container(
-                          height: 60.h,
-                          width: 66.w,
-                          decoration: BoxDecoration(
-                            color: MyColors.fieldContainerColors,
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 14.h,
-                                  width: 18.w,
-                                  child: Image.asset(
-                                    'assets/egypt.png',
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                                Text(
-                                  '20+',
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                        Consumer<CountryProvider>(
+                          builder: (context, countryProvider, _) {
+                            return countryProvider.isLoading == true
+                                ? const LoadingWidget()
+                                : Container(
+                                    height: 70.h,
+                                    width: 66.w,
+                                    decoration: BoxDecoration(
+                                      color: MyColors.fieldContainerColors,
+                                      borderRadius: BorderRadius.circular(10.r),
+                                    ),
+                                    child: Center(
+                                      child: CustomDropDownFormField(
+                                        onChanged: (value) {
+                                          setState(() {
+                                            countryCode = value;
+                                          });
+                                          print(countryCode);
+                                        },
+                                        title: 'الدوله',
+                                        items: countryProvider.countryList!.map(
+                                          (e) {
+                                            return DropdownMenuItem<String>(
+                                              onTap: (){
+                                                setState(() {
+                                                  countryID = e.id.toString();
+                                                });
+                                                print(countryID);
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    e.title,
+                                                    style: TextStyle(
+                                                        fontSize: 12.sp),
+                                                  ),
+                                                  Text(
+                                                    e.code,
+                                                    style: TextStyle(
+                                                        fontSize: 12.sp),
+                                                  ),
+                                                ],
+                                              ),
+                                              value: e.code.toString(),
+                                            );
+                                          },
+                                        ).toList(),
+                                      ),
+                                    ),
+                                  );
+                          },
                         )
                       ],
                     ),
@@ -153,14 +176,20 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                     GestureDetector(
                       onTap: () async {
                         if (!formKey.currentState!.validate()) {
-                          print('un authorized');
                         } else {
+                          print(
+                              '$countryCode' + phoneController.text.toString());
                           await authProvider
                               .getOtpNumber(
-                                  phoneNumber: phoneController.text.toString())
-                              .then((value) {
+                                  phoneNumber: '$countryCode' +
+                                      phoneController.text.toString())
+                              .then((value) async {
                             Constants.navigateTo(
-                              routeName:  PincodeScreen(phoneNumber : phoneController.text.toString()),
+                              routeName: PincodeScreen(
+                                phoneNumber: (countryCode ??'') +
+                                    phoneController.text.toString(),
+                                countryID: countryID!,
+                              ),
                               context: context,
                             );
                           });

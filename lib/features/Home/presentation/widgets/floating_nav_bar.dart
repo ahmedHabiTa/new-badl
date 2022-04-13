@@ -1,5 +1,5 @@
 
-import 'package:badl/features/Home/presentation/pages/add_offer_screen.dart';
+import 'package:badl/features/Home/presentation/pages/add_product_screen.dart';
 import 'package:badl/features/Home/presentation/pages/home_screen.dart';
 import 'package:badl/features/Home/presentation/pages/my_products_screen.dart';
 import 'package:badl/features/Home/presentation/pages/profile_screen.dart';

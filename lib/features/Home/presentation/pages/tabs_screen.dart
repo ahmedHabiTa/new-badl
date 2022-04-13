@@ -6,7 +6,7 @@ import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'add_offer_screen.dart';
+import 'add_product_screen.dart';
 import 'home_screen.dart';
 import 'my_products_screen.dart';
 

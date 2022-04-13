@@ -53,9 +53,12 @@ class CustomRowFields extends StatelessWidget {
                         height: 21,
                         width: 21,
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(3),
                             image: DecorationImage(
                           fit: BoxFit.fill,
-                          image: NetworkImage(mainCategoriesList[index].image),
+                          image: NetworkImage(
+                            'https://images.unsplash.com/photo-1551582045-6ec9c11d8697?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80',
+                          ),
                         )),
                       ),
                       const SizedBox(

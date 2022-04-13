@@ -11,10 +11,12 @@ import 'package:provider/provider.dart';
 
 class PincodeScreen extends StatefulWidget {
   final String phoneNumber;
+  final String countryID;
 
   const PincodeScreen({
     Key? key,
     required this.phoneNumber,
+    required this.countryID,
   }) : super(key: key);
 
   @override
@@ -227,6 +229,7 @@ class _PincodeScreenState extends State<PincodeScreen> {
                         );
                         await authProvider.login(
                           mobile: widget.phoneNumber,
+                          countryID: widget.countryID,
                           context: context,
                         );
                       }

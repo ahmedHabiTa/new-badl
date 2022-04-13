@@ -1,6 +1,7 @@
 import 'package:badl/core/colors.dart';
 import 'package:badl/core/constants.dart';
 import 'package:badl/features/Home/presentation/pages/tabs_screen.dart';
+import 'package:badl/features/Home/provider/ads_provider.dart';
 import 'package:badl/features/Home/provider/category_provider.dart';
 import 'package:badl/features/auth/provider/auth_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,7 +10,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:provider/provider.dart';
 
+import 'core/providers/country_provider.dart';
 import 'core/util/shared_pref_helper.dart';
+import 'features/Home/provider/user_provider.dart';
 import 'features/on_boarding_screen/on_boarding_screen.dart';
 
 void main() async {
@@ -44,6 +47,15 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<CategoryProvider>(
           create: (_) => CategoryProvider()..getMainCategory(),
+        ),
+        ChangeNotifierProvider<CountryProvider>(
+          create: (_) => CountryProvider()..getCountry(),
+        ),
+        ChangeNotifierProvider<AdsProvider>(
+          create: (_) => AdsProvider()..getLatestAds(),
+        ),
+        ChangeNotifierProvider<UserProvider>(
+          create: (_) => UserProvider()..getMyAds(),
         ),
       ],
       child: ScreenUtilInit(

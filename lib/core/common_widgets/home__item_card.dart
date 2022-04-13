@@ -7,7 +7,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'custom_text.dart';
 
 class HomeItemCard extends StatefulWidget {
-  HomeItemCard({Key? key}) : super(key: key);
+  final int? id;
+ const HomeItemCard({
+    Key? key,
+     this.id,
+  }) : super(key: key);
 
   @override
   State<HomeItemCard> createState() => _HomeItemCardState();
@@ -23,7 +27,7 @@ class _HomeItemCardState extends State<HomeItemCard> {
         GestureDetector(
           onTap: () {
             Constants.navigateTo(
-                routeName: const AdsDetailsScreen(), context: context);
+                routeName:  AdsDetailsScreen(id: widget.id!), context: context);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -31,7 +35,8 @@ class _HomeItemCardState extends State<HomeItemCard> {
               image: const DecorationImage(
                 fit: BoxFit.fill,
                 image: NetworkImage(
-                    'https://images.unsplash.com/photo-1551582045-6ec9c11d8697?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80'),
+                  'https://images.unsplash.com/photo-1551582045-6ec9c11d8697?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80',
+                ),
               ),
             ),
           ),

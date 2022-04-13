@@ -1,7 +1,6 @@
 import 'package:badl/core/colors.dart';
-import 'package:badl/features/Home/presentation/pages/favourite_screen.dart';
+import 'package:badl/core/providers/country_provider.dart';
 import 'package:badl/features/Home/presentation/pages/search_screen.dart';
-import 'package:badl/features/auth/provider/auth_provider.dart';
 import 'package:badl/features/notifications/presentation/pages/notifications_screen.dart';
 import 'package:badl/core/constants.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +54,7 @@ class HomeAppBar extends StatelessWidget {
             HomeAppBarIcons(
               icon: Icons.search,
               onTap: () async{
-                await Provider.of<AuthProvider>(context,listen: false).getCountry();
+                await Provider.of<CountryProvider>(context,listen: false).getCountry();
                 Constants.navigateTo(
                   routeName: const SearchScreen(), context: context);
               },
