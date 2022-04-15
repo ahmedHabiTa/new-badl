@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:badl/models/ad_details_model.dart';
 import 'package:badl/models/latest_ads_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../core/util/api_base_helper.dart';
 
@@ -82,4 +85,22 @@ class AdsProvider extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
+
+  File? image;
+  Future pickImage({
+    required  ImageSource imageSource,
+  }) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image == null) return;
+
+      final imageTemporary = File(image.path);
+      this.image = imageTemporary;
+      notifyListeners();
+    } on PlatformException catch (e) {
+      print('failed to pick image');
+    }
+    notifyListeners();
+  }
+
 }

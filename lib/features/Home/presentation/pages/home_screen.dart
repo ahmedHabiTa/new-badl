@@ -17,72 +17,77 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const HomeAppBar(),
-            const SizedBox(height: 10),
-            CustomRowText(
-              //Todo: implement the bottom sheet
-              onTap: () {
-                print('show bottom sheet');
-                showModalBottomSheet(
-                  backgroundColor: Colors.transparent,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return BottomSheetWidget();
-                  },
-                );
-              },
-              rightText: 'الاقسام',
-              leftText: 'خدمه',
-            ),
-            const SizedBox(height: 10),
-            Consumer<CategoryProvider>(
-              builder: (BuildContext context, catProvider, _) {
-                return catProvider.isLoading == true
-                    ? const LoadingWidget()
-                    : CustomRowFields(
-                        mainCategoriesList: catProvider.mainCategories,
-                      );
-              },
-            ),
-            const SizedBox(height: 10),
-            CustomRowText(
-              //Todo: implement the bottom sheet
-              onTap: () => print('المضاف حديثا'),
-              rightText: 'المضاف حديثا',
-              leftText: 'الكل',
-            ),
-            Consumer<AdsProvider>(
-              builder: (context,adProvider,_){
-                return adProvider.isLoading == true ? Container(): Padding(
-                  padding: const EdgeInsets.only(left: 14.0, right: 14.0),
-                  child: SizedBox(
-                    height: 400.h,
-                    child: GridView.builder(
-                      itemCount: adProvider.adDetailsList!.length,
-                      // physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 2 / 2.5,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemBuilder: (context, index) {
-                          return HomeItemCard(
-                            id:adProvider.adDetailsList![index].id,
-                          );
-                        }),
-                  ),
-                );
-              },
-            ),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const HomeAppBar(),
+              const SizedBox(height: 10),
+              CustomRowText(
+                //Todo: implement the bottom sheet
+                onTap: () {
+                  print('show bottom sheet');
+                  showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return BottomSheetWidget();
+                    },
+                  );
+                },
+                rightText: 'الاقسام',
+                leftText: 'خدمه',
+              ),
+              const SizedBox(height: 10),
+              Consumer<CategoryProvider>(
+                builder: (BuildContext context, catProvider, _) {
+                  return catProvider.isLoading == true
+                      ? const LoadingWidget()
+                      : CustomRowFields(
+                          mainCategoriesList: catProvider.mainCategories,
+                        );
+                },
+              ),
+              const SizedBox(height: 10),
+              CustomRowText(
+                //Todo: implement the bottom sheet
+                onTap: () => print('المضاف حديثا'),
+                rightText: 'المضاف حديثا',
+                leftText: 'الكل',
+              ),
+              const SizedBox(height: 10,),
+              Consumer<AdsProvider>(
+                builder: (context,adProvider,_){
+                  return adProvider.isLoading == true ? Container(): Padding(
+                    padding: const EdgeInsets.only(left: 14.0, right: 14.0),
+                    child: SizedBox(
+                      height: 400.h,
+                      child: GridView.builder(
+                        itemCount: adProvider.adDetailsList!.length,
+                        // physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 2 / 2.5,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 10,
+                          ),
+                          itemBuilder: (context, index) {
+                            return HomeItemCard(
+                              id:adProvider.adDetailsList![index].id,
+title:adProvider.adDetailsList![index].name,
+                              image:adProvider.adDetailsList![index].image ,
+                            );
+                          }),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

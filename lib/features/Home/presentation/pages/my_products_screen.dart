@@ -27,7 +27,7 @@ class MyProductsScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: SizedBox(
-          height: 800.h,
+          height: 600.h,
           width: double.infinity,
           child: Consumer<UserProvider>(
             builder: (context, userProvider, _){
@@ -35,7 +35,9 @@ class MyProductsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 10),
-                  Padding(
+                  userProvider.isLoading == true
+                      ?  Container()
+                      : Padding(
                     padding: const EdgeInsets.only(right: 17.0),
                     child: CustomText(
                       text: userProvider.adDetailsList!.length.toString()+ " منتج",
@@ -65,6 +67,7 @@ class MyProductsScreen extends StatelessWidget {
                                   .adDetailsList![index].name,
                               categoryName: userProvider
                                   .adDetailsList![index].categoryName,
+                              image: userProvider.adDetailsList![index].image,
                             );
                           },
                         ),

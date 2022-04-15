@@ -8,9 +8,14 @@ import 'custom_text.dart';
 
 class HomeItemCard extends StatefulWidget {
   final int? id;
+  final String? image;
+  final String? title;
+
  const HomeItemCard({
     Key? key,
      this.id,
+   this.image,
+   this.title,
   }) : super(key: key);
 
   @override
@@ -32,9 +37,9 @@ class _HomeItemCardState extends State<HomeItemCard> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
-              image: const DecorationImage(
+              image:  DecorationImage(
                 fit: BoxFit.fill,
-                image: NetworkImage(
+                image: NetworkImage(widget.image??
                   'https://images.unsplash.com/photo-1551582045-6ec9c11d8697?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80',
                 ),
               ),
@@ -64,10 +69,11 @@ class _HomeItemCardState extends State<HomeItemCard> {
                   ),
                   Center(
                     child: SizedBox(
+                      height: 35,
                       width: 104,
                       child: CustomText(
                         maxLines: 2,
-                        text: 'شاحن سياره وشاحن متنقل',
+                        text: widget.title!,
                         fontSize: 10,
                         color: const Color(0xFF575757),
                         fontWeight: FontWeight.bold,

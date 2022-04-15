@@ -8,11 +8,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ProductItemWidget extends StatelessWidget {
   final String? title;
   final String? categoryName;
+  final String? image;
 
   const ProductItemWidget({
     Key? key,
     this.title,
     this.categoryName,
+    this.image,
   }) : super(key: key);
 
   @override
@@ -31,7 +33,7 @@ class ProductItemWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4.r),
                   image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: NetworkImage(
+                      image: NetworkImage(image??
                           'https://images.unsplash.com/photo-1551582045-6ec9c11d8697?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80'))),
             ),
             const SizedBox(width: 10),

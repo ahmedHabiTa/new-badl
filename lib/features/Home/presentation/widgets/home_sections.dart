@@ -1,10 +1,13 @@
 import 'package:badl/core/common_widgets/custom_text.dart';
-import 'package:badl/features/Home/presentation/pages/section_screen.dart';
+import 'package:badl/features/Home/presentation/pages/category_screen.dart';
 import 'package:badl/core/constants.dart';
 import 'package:badl/models/main_category_model.dart';
 import 'package:badl/models/sub_category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+
+import '../../provider/category_provider.dart';
 
 class CustomRowFields extends StatelessWidget {
   final List<MainCategoryDetails> mainCategoriesList;
@@ -31,15 +34,16 @@ class CustomRowFields extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 Constants.navigateTo(
-                  routeName: SectionScreen(
+                  routeName: CategoryScreen(
                     categoryId: mainCategoriesList[index].id,
                     title: mainCategoriesList[index].title,
                   ),
                   context: context,
                 );
+                Provider.of<CategoryProvider>(context,listen: false).getAdsByCategory(categoryId: mainCategoriesList[index].id.toString());
               },
               child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
+                padding: const EdgeInsets.only(left: 12.0),
                 child: Container(
                   height: 50.h,
                   padding: const EdgeInsets.only(right: 5, left: 5),
@@ -56,8 +60,7 @@ class CustomRowFields extends StatelessWidget {
                           borderRadius: BorderRadius.circular(3),
                             image: DecorationImage(
                           fit: BoxFit.fill,
-                          image: NetworkImage(
-                            'https://images.unsplash.com/photo-1551582045-6ec9c11d8697?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80',
+                          image: NetworkImage(mainCategoriesList[index].image
                           ),
                         )),
                       ),

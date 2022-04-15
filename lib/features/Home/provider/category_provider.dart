@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../core/util/api_base_helper.dart';
+import '../../../models/latest_ads_model.dart';
 
 class CategoryProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -55,5 +56,29 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<AdDetails>? _adDetailsList;
 
+  List<AdDetails>? get adDetailsList => _adDetailsList;
+
+  Future<void> getAdsByCategory({
+  required String categoryId
+}) async {
+    isLoading = true;
+
+    try {
+      final response = await ApiBaseHelper.get(url: 'api/bycat/all/$categoryId');
+print(response.statusCode);
+      if (response.statusCode == 200) {
+        List result = json.decode(response.body)['data']['data'];
+        _adDetailsList =
+            result.map((e) => AdDetails.fromJson(e)).cast<AdDetails>().toList();
+        print(_adDetailsList?.length);
+       // print(_adDetailsList?.first.image);
+      }
+    } catch (error) {
+      throw UnimplementedError();
+    }
+    isLoading = false;
+    notifyListeners();
+  }
 }

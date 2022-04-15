@@ -92,6 +92,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                 itemBuilder: (context, index) {
                                   return HomeItemCard(
                                     id: adProvider.searchedList[index].id,
+                                    title: adProvider.searchedList[index].name,
+                                    image: adProvider.searchedList[index].image,
                                   );
                                 }),
                           ),

@@ -3,6 +3,7 @@ import 'package:badl/core/constants.dart';
 import 'package:badl/features/Home/presentation/pages/tabs_screen.dart';
 import 'package:badl/features/Home/provider/ads_provider.dart';
 import 'package:badl/features/Home/provider/category_provider.dart';
+import 'package:badl/features/auth/presentation/pages/phone_auth_screen.dart';
 import 'package:badl/features/auth/provider/auth_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLogged = SharedPrefsHelper.getData(key: 'isLogged') ?? false;
+    final onBoard = SharedPrefsHelper.getData(key: 'onBoard') ?? false;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(
@@ -68,9 +70,11 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           // initialRoute: onBoardingScreen,
-          home: isLogged == true
-              ? const TabsScreen()
-              : OnBoardingScreen(),
+          home: onBoard == false
+              ? OnBoardingScreen()
+              : isLogged == true
+                  ? const TabsScreen()
+                  : const PhoneAuthScreen(),
           // onGenerateRoute: appRoute!.generateRoute,
           localizationsDelegates: translator.delegates,
           // Android + iOS Delegates

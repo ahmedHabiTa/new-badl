@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:badl/core/constants.dart';
 import 'package:badl/core/util/api_base_helper.dart';
 import 'package:badl/core/util/shared_pref_helper.dart';
 import 'package:badl/features/auth/presentation/pages/phone_auth_screen.dart';
 import 'package:badl/features/auth/presentation/pages/register_screen.dart';
-import 'package:badl/models/country_model.dart';
+
 import 'package:badl/models/login.dart';
 import 'package:badl/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -45,6 +46,7 @@ class AuthProvider extends ChangeNotifier {
   Future<void> verify({
     required String smsCode,
     required BuildContext context,
+    required Function login,
   }) async {
     isLoading = true;
     PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
@@ -53,6 +55,7 @@ class AuthProvider extends ChangeNotifier {
     );
     try {
       await auth.signInWithCredential(phoneAuthCredential);
+      login();
       //Constants.navigateToRep(routeName: RegisterScreen(), context: context);
     } on FirebaseAuthException catch (error) {
       Constants.showToast(
@@ -145,7 +148,7 @@ class AuthProvider extends ChangeNotifier {
         await SharedPrefsHelper.saveData(key: 'token', value: token.toString());
         await SharedPrefsHelper.saveData(key: 'isLogged', value: true);
         await SharedPrefsHelper.saveData(key: 'userID', value: res.user.id);
-        await SharedPrefsHelper.saveData(key: 'image', value: res.user.image);
+       //await SharedPrefsHelper.saveData(key: 'image', value: image.toString());
         await SharedPrefsHelper.saveData(key: 'username', value: res.user.name);
         await SharedPrefsHelper.saveData(
             key: 'userCountryID', value: res.user.countryId);
@@ -180,4 +183,7 @@ class AuthProvider extends ChangeNotifier {
       context: context,
     );
   }
+
+
+
 }

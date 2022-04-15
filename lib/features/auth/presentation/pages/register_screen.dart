@@ -1,13 +1,21 @@
+import 'dart:io';
+
+import 'package:badl/core/common_widgets/custom_text.dart';
 import 'package:badl/core/common_widgets/custom_text_form_field.dart';
 import 'package:badl/features/Home/presentation/pages/tabs_screen.dart';
 import 'package:badl/core/colors.dart';
 import 'package:badl/core/constants.dart';
+import 'package:badl/features/Home/provider/user_provider.dart';
 import 'package:badl/features/auth/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class RegisterScreen extends StatelessWidget {
+import '../../../../core/util/shared_pref_helper.dart';
+
+class RegisterScreen extends StatefulWidget {
   final String mobile;
   final String countryID;
 
@@ -17,7 +25,13 @@ class RegisterScreen extends StatelessWidget {
     required this.countryID,
   }) : super(key: key);
 
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final nameController = TextEditingController();
+
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -115,20 +129,126 @@ class RegisterScreen extends StatelessWidget {
                   height: 8.h,
                 ),
                 //ToDo: اعمل كونتينر نفس الحجم ولما يختار صوره اغير بينهم
-                Container(
-                  height: 168,
-                  width: 328.w,
-                  decoration: BoxDecoration(
-                      color: const Color(0xFFe5e5e5),
-                      borderRadius: BorderRadius.circular(8.r)),
-                  child: const Center(
-                    child: Icon(
-                      Icons.add_photo_alternate_outlined,
-                      size: 37,
-                      color: Color(0xFF4a4a4a),
-                    ),
-                  ),
-                ),
+                Provider.of<UserProvider>(
+                          context,
+                        ).image !=
+                        null
+                    ? GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (_) {
+                                return SizedBox(
+                                  height: 120,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Provider.of<UserProvider>(context,
+                                                  listen: false)
+                                              .pickImage(
+                                                  imageSource:
+                                                      ImageSource.camera);
+                                        },
+                                        child: const CustomText(
+                                          text: 'Camera',
+                                          color: MyColors.meanColor,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Provider.of<UserProvider>(context,
+                                                  listen: false)
+                                              .pickImage(
+                                                  imageSource:
+                                                      ImageSource.gallery);
+                                        },
+                                        child: const CustomText(
+                                          text: 'Gallery',
+                                          color: MyColors.meanColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                        },
+                        child: Container(
+                          height: 168,
+                          width: 328.w,
+                          decoration: BoxDecoration(
+                              color: const Color(0xFFe5e5e5),
+                              borderRadius: BorderRadius.circular(8.r),
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: FileImage(
+                                    Provider.of<UserProvider>(context).image!),
+                              )),
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (_) {
+                                return SizedBox(
+                                  height: 120,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Provider.of<UserProvider>(context,
+                                              listen: false)
+                                              .pickImage(
+                                              imageSource:
+                                              ImageSource.camera);
+                                        },
+                                        child: const CustomText(
+                                          text: 'Camera',
+                                          color: MyColors.meanColor,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Provider.of<UserProvider>(context,
+                                              listen: false)
+                                              .pickImage(
+                                              imageSource:
+                                              ImageSource.gallery);
+                                        },
+                                        child: const CustomText(
+                                          text: 'Gallery',
+                                          color: MyColors.meanColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                        },
+                        child: Container(
+                          height: 168,
+                          width: 328.w,
+                          decoration: BoxDecoration(
+                              color: const Color(0xFFe5e5e5),
+                              borderRadius: BorderRadius.circular(8.r)),
+                          child: const Center(
+                            child: Icon(
+                              Icons.add_photo_alternate_outlined,
+                              size: 37,
+                              color: Color(0xFF4a4a4a),
+                            ),
+                          ),
+                        ),
+                      ),
                 SizedBox(
                   height: 15.h,
                 ),
@@ -138,18 +258,19 @@ class RegisterScreen extends StatelessWidget {
                       onTap: () async {
                         if (!formKey.currentState!.validate()) {
                         } else {
-                          await authProvider.register(
-                            mobile: mobile,
-                            name: nameController.text.toString(),
-                              countryID: countryID,
-                            context: context
-                          ).then((value){
+                          //  await SharedPrefsHelper.saveData(key: 'image', value: image.toString());
+                          await authProvider
+                              .register(
+                                  mobile: widget.mobile,
+                                  name: nameController.text.toString(),
+                                  countryID: widget.countryID,
+                                  context: context)
+                              .then((value) {
                             Constants.navigateToRep(
-                                routeName: const TabsScreen(), context: context);
+                                routeName: const TabsScreen(),
+                                context: context);
                           });
-
                         }
-
                       },
                       child: Container(
                         height: 56.h,

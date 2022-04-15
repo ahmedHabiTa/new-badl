@@ -1,3 +1,4 @@
+import 'package:badl/core/util/shared_pref_helper.dart';
 import 'package:badl/features/auth/presentation/pages/phone_auth_screen.dart';
 import 'package:badl/core/colors.dart';
 import 'package:badl/core/constants.dart';
@@ -35,7 +36,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   child: Align(
                     alignment: Alignment.topRight,
                     child: GestureDetector(
-                      onTap: () {
+                      onTap: () async{
+                        await SharedPrefsHelper.saveData(key: 'onBoard', value: true);
                         print('skip');
                         Constants.navigateToRep(
                             routeName:const PhoneAuthScreen(), context: context);

@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:badl/core/util/shared_pref_helper.dart';
+import 'package:badl/models/user_profile_model.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
+import 'package:flutter/services.dart';
 import '../../../core/util/api_base_helper.dart';
 import '../../../models/latest_ads_model.dart';
 
@@ -67,4 +71,41 @@ class UserProvider extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
+  UserProfile? userProfile ;
+    Future<void> getUserData()async{
+    isLoading = true;
+    final userId = await SharedPrefsHelper.getData(key: 'userID');
+    try {
+      final response = await ApiBaseHelper.get(url: 'api/user/$userId');
+
+      if (response.statusCode == 200) {
+        final result = UserProfile.fromJson(json.decode(response.body)['data']);
+        userProfile = result;
+        print(userProfile!.name);
+      }
+    } catch (error) {
+      throw UnimplementedError();
+    }
+    isLoading = false;
+    notifyListeners();
+    }
+
+  File? image;
+  Future pickImage({
+required  ImageSource imageSource,
+}) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image == null) return;
+
+      final imageTemporary = File(image.path);
+      this.image = imageTemporary;
+      notifyListeners();
+    } on PlatformException catch (e) {
+      print('failed to pick image');
+    }
+    notifyListeners();
+  }
+
+
 }

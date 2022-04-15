@@ -138,26 +138,16 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                                         items: countryProvider.countryList!.map(
                                           (e) {
                                             return DropdownMenuItem<String>(
-                                              onTap: (){
+                                              onTap: () {
                                                 setState(() {
                                                   countryID = e.id.toString();
                                                 });
                                                 print(countryID);
                                               },
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    e.title,
-                                                    style: TextStyle(
-                                                        fontSize: 12.sp),
-                                                  ),
-                                                  Text(
-                                                    e.code,
-                                                    style: TextStyle(
-                                                        fontSize: 12.sp),
-                                                  ),
-                                                ],
+                                              child: Text(
+                                                e.code,
+                                                style:
+                                                    TextStyle(fontSize: 12.sp),
                                               ),
                                               value: e.code.toString(),
                                             );
@@ -186,7 +176,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                               .then((value) async {
                             Constants.navigateTo(
                               routeName: PincodeScreen(
-                                phoneNumber: (countryCode ??'') +
+                                phoneNumber: (countryCode ?? '') +
                                     phoneController.text.toString(),
                                 countryID: countryID!,
                               ),

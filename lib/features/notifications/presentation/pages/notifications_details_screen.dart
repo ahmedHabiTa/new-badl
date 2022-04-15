@@ -58,7 +58,7 @@ class NotificationDetailsScreen extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Constants.navigateTo(
-                    routeName: AdsDetailsScreen(), context: context);
+                    routeName: AdsDetailsScreen(id: 1), context: context);
               },
               child: Container(
                 height: 60.h,

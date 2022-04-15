@@ -29,7 +29,7 @@ class SettingsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: SizedBox(
           width: double.infinity,
-          height: 800.h,
+          height: 600.h,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

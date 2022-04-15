@@ -224,14 +224,15 @@ class _PincodeScreenState extends State<PincodeScreen> {
                         );
                       } else {
                         await authProvider.verify(
-                          smsCode: pinCodeController.text.toString(),
-                          context: context,
-                        );
-                        await authProvider.login(
-                          mobile: widget.phoneNumber,
-                          countryID: widget.countryID,
-                          context: context,
-                        );
+                            smsCode: pinCodeController.text.toString(),
+                            context: context,
+                            login: () async {
+                              await authProvider.login(
+                                mobile: widget.phoneNumber,
+                                countryID: widget.countryID,
+                                context: context,
+                              );
+                            });
                       }
                     },
                     child: Container(

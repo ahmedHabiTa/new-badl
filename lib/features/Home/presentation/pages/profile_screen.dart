@@ -42,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SingleChildScrollView(
         child: SizedBox(
           width: double.infinity,
-          height: 800.h,
+          height: 600.h,
           child: Column(
             children: [
               Padding(
@@ -119,7 +119,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ? const Center(
                           child: LoadingWidget(),
                         )
-                      :userProvider.adDetailsList!.isEmpty ? Container(): Center(
+                      :userProvider.adDetailsList!.isEmpty ? const Center(child: Padding(
+                        padding: EdgeInsets.only(top: 50.0),
+                        child: Text('لم تقم بأضافه اي منتجات'),
+                      ),): Center(
                           child: Padding(
                             padding:
                                 const EdgeInsets.only(right: 20.0, left: 20.0),
