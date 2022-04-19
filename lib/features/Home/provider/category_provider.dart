@@ -38,7 +38,7 @@ class CategoryProvider extends ChangeNotifier {
   List<SubCategoryDetails>? _subCategories;
 
   List<SubCategoryDetails> get subCategories => _subCategories!;
-  Future<void> getCategoryById({
+  Future<void> getSubCategoryById({
   required int categoryId,
 }) async {
     isLoading = true;

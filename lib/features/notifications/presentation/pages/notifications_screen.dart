@@ -15,11 +15,11 @@ class NotificationsScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: CustomText(
+        title:const CustomText(
           text: 'التنبيهات',
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: const Color(0xFF2b2b2b),
+          color:  Color(0xFF2b2b2b),
         ),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
@@ -30,12 +30,12 @@ class NotificationsScreen extends StatelessWidget {
         ),
       ),
       body: SizedBox(
-        height: 690.h,
+        height: MediaQuery.of(context).size.height,
         width: double.infinity,
         child: ListView.builder(
           itemCount: 10,
           itemBuilder: (context, index) {
-            return NotificationItemCard();
+            return const NotificationItemCard();
           },
         ),
       ),

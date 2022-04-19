@@ -2,6 +2,7 @@ import 'package:badl/core/common_widgets/custom_text_form_field.dart';
 import 'package:badl/core/common_widgets/loading_widget.dart';
 import 'package:badl/core/providers/country_provider.dart';
 import 'package:badl/core/util/shared_pref_helper.dart';
+import 'package:badl/features/Home/presentation/pages/tabs_screen.dart';
 import 'package:badl/features/auth/presentation/pages/pincode_screen.dart';
 import 'package:badl/core/colors.dart';
 import 'package:badl/core/constants.dart';
@@ -112,7 +113,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                             size: 20,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Consumer<CountryProvider>(
@@ -207,6 +208,34 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                                 ),
                               ),
                             ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await SharedPrefsHelper.saveData(key: 'token', value: '1');
+                        Constants.navigateTo(
+                            routeName: const TabsScreen(), context: context);
+                      },
+                      child: Container(
+                        height: 56.h,
+                        width: 328.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.r),
+                          color: MyColors.meanColor,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'الذهاب الي الرئيسيه',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),

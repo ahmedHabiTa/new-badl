@@ -58,32 +58,41 @@ class HomeScreen extends StatelessWidget {
                 rightText: 'المضاف حديثا',
                 leftText: 'الكل',
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               Consumer<AdsProvider>(
-                builder: (context,adProvider,_){
-                  return adProvider.isLoading == true ? Container(): Padding(
-                    padding: const EdgeInsets.only(left: 14.0, right: 14.0),
-                    child: SizedBox(
-                      height: 400.h,
-                      child: GridView.builder(
-                        itemCount: adProvider.adDetailsList!.length,
-                        // physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 2 / 2.5,
-                            crossAxisSpacing: 12,
-                            mainAxisSpacing: 10,
-                          ),
-                          itemBuilder: (context, index) {
-                            return HomeItemCard(
-                              id:adProvider.adDetailsList![index].id,
-title:adProvider.adDetailsList![index].name,
-                              image:adProvider.adDetailsList![index].image ,
-                            );
-                          }),
-                    ),
-                  );
+                builder: (context, adProvider, _) {
+                  return adProvider.isLoading == true
+                      ? Container()
+                      : Padding(
+                          padding:
+                              const EdgeInsets.only(left: 14.0, right: 14.0),
+                          child: GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: adProvider.adDetailsList!.length,
+                              // physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 2 / 2.5,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 10,
+                              ),
+                              itemBuilder: (context, index) {
+                                return HomeItemCard(
+                                  id: adProvider.adDetailsList![index].id,
+                                  title:
+                                      adProvider.adDetailsList![index].name,
+                                  image:
+                                      adProvider.adDetailsList![index].image,
+                                  type: adProvider.adDetailsList![index].type,
+                                  isFavourite: adProvider.adDetailsList![index].favoried,
+                                  categoryName: adProvider.adDetailsList![index].categoryName,
+                                );
+                              }),
+                        );
                 },
               ),
             ],

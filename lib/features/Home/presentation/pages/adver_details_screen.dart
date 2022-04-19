@@ -2,10 +2,15 @@ import 'package:badl/core/colors.dart';
 import 'package:badl/core/common_widgets/custom_text.dart';
 import 'package:badl/core/common_widgets/home__item_card.dart';
 import 'package:badl/core/common_widgets/loading_widget.dart';
+import 'package:badl/core/constants.dart';
 import 'package:badl/features/Home/provider/ads_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../core/common_widgets/custom_dialog.dart';
+import '../../../../core/util/shared_pref_helper.dart';
+import 'my_products_screen.dart';
 
 class AdsDetailsScreen extends StatelessWidget {
   final int? id;
@@ -51,7 +56,7 @@ class AdsDetailsScreen extends StatelessWidget {
                     width: double.infinity,
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: EdgeInsets.only(left: 12.0.w, right: 12.0.w),
+                        padding: EdgeInsets.only(left: 12.0.w, right: 12.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -66,22 +71,14 @@ class AdsDetailsScreen extends StatelessWidget {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(right: 15.0),
-                              child: Row(
-                                children: [
-                                  CustomText(
-                                    text: 'خدمه',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: MyColors.meanColor,
-                                  ),
-                                  const SizedBox(width: 20),
-                                  CustomText(
-                                    text: adProvider.adModel!.categoryName,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: MyColors.meanColor,
-                                  ),
-                                ],
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: CustomText(
+                                  text: adProvider.adModel!.categoryName,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: MyColors.meanColor,
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -91,12 +88,12 @@ class AdsDetailsScreen extends StatelessWidget {
                               padding: const EdgeInsets.only(
                                   right: 15.0, left: 15.0),
                               child: Row(
-                                children: [
-                                  const Icon(
+                                children: const [
+                                  Icon(
                                     Icons.person,
                                     color: Color(0xFF575757),
                                   ),
-                                  const SizedBox(
+                                  SizedBox(
                                     width: 8,
                                   ),
                                   CustomText(
@@ -105,12 +102,12 @@ class AdsDetailsScreen extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF575757),
                                   ),
-                                  const Spacer(),
-                                  const Icon(
+                                  Spacer(),
+                                  Icon(
                                     Icons.location_on,
                                     color: Color(0xFF575757),
                                   ),
-                                  const SizedBox(
+                                  SizedBox(
                                     width: 8,
                                   ),
                                   CustomText(
@@ -119,7 +116,7 @@ class AdsDetailsScreen extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF575757),
                                   ),
-                                  const SizedBox(
+                                  SizedBox(
                                     width: 8,
                                   ),
                                 ],
@@ -148,18 +145,18 @@ class AdsDetailsScreen extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: [
+                                children: const [
                                   CustomText(
                                     text: 'سنه الإنتاج :  2020',
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF232323),
+                                    color: Color(0xFF232323),
                                   ),
                                   CustomText(
                                     text: 'مده الاستخدام سنتين',
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF232323),
+                                    color: Color(0xFF232323),
                                   ),
                                 ],
                               ),
@@ -167,15 +164,15 @@ class AdsDetailsScreen extends StatelessWidget {
                             const SizedBox(
                               height: 20,
                             ),
-                            Align(
+                            const Align(
                               alignment: Alignment.centerRight,
                               child: Padding(
-                                padding: const EdgeInsets.only(right: 15.0),
+                                padding: EdgeInsets.only(right: 15.0),
                                 child: CustomText(
                                   text: 'الوصف',
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF2b2b2b),
+                                  color: Color(0xFF2b2b2b),
                                 ),
                               ),
                             ),
@@ -217,45 +214,60 @@ class AdsDetailsScreen extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(10),
                                         color: MyColors.meanColor,
                                       ),
-                                      child: Center(
+                                      child: const Center(
                                         child: CustomText(
-                                          text: 'موافقه',
+                                          text: 'أضف عرض',
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
-                                          color: const Color(0xFFffffff),
+                                          color: Color(0xFFffffff),
                                         ),
                                       ),
                                     ),
-                                    onTap: () => print('accept'),
+                                    onTap: () async {
+                                      final token =
+                                          await SharedPrefsHelper.getData(
+                                              key: 'token');
+                                      if (token == "1") {
+                                        return CustomDialog.customDialog(
+                                            context: context);
+                                      } else {
+                                        Constants.navigateTo(
+                                            routeName: MyProductsScreen(
+                                              adId: id.toString(),
+                                              title: 'اختر منتج',
+                                            ),
+                                            context: context);
+                                      }
+                                    },
                                   )
                                 ],
                               ),
                             ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            SizedBox(
-                              width: 310.w,
-                              child: GestureDetector(
-                                child: Container(
-                                  height: 56.h,
-                                  width: 158.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Color(0xFFe92d2d),
-                                  ),
-                                  child: Center(
-                                    child: CustomText(
-                                      text: 'رفض',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFFffffff),
-                                    ),
-                                  ),
-                                ),
-                                onTap: () => print('accept'),
-                              ),
-                            ),
+                            // const SizedBox(
+                            //   height: 20,
+                            // ),
+                            // SizedBox(
+                            //   width: 310.w,
+                            //   child: GestureDetector(
+                            //     child: Container(
+                            //       height: 56.h,
+                            //       width: 158.w,
+                            //       decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(10),
+                            //         color: Color(0xFFe92d2d),
+                            //       ),
+                            //       child: Center(
+                            //         child: CustomText(
+                            //           text: 'رفض',
+                            //           fontSize: 16,
+                            //           fontWeight: FontWeight.bold,
+                            //           color: const Color(0xFFffffff),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     onTap: () => print('accept'),
+                            //   ),
+                            // ),
                             const SizedBox(
                               height: 20,
                             ),

@@ -84,6 +84,9 @@ class CategoryScreen extends StatelessWidget {
                                       id: catProvider.adDetailsList![index].id,
                                       image: catProvider.adDetailsList![index].image,
                                       title: catProvider.adDetailsList![index].name,
+                                      type: catProvider.adDetailsList![index].type,
+                                      isFavourite: catProvider.adDetailsList![index].favoried,
+                                      categoryName: catProvider.adDetailsList![index].categoryName,
                                     );
                                   }),
                             ),

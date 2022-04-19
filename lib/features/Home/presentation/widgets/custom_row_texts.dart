@@ -29,24 +29,24 @@ class CustomRowText extends StatelessWidget {
             color: const Color(0xFF2b2b2b),
           ),
           const Spacer(),
-          GestureDetector(
-            onTap: ()=>onTap(),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.filter_alt_sharp,
-                  size: 20,
-                  color: MyColors.meanColor,
-                ),
-                CustomText(
-                  text: leftText,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: MyColors.meanColor,
-                ),
-              ],
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: ()=>onTap(),
+          //   child: Row(
+          //     children: [
+          //       const Icon(
+          //         Icons.filter_alt_sharp,
+          //         size: 20,
+          //         color: MyColors.meanColor,
+          //       ),
+          //       CustomText(
+          //         text: leftText,
+          //         fontSize: 12,
+          //         fontWeight: FontWeight.bold,
+          //         color: MyColors.meanColor,
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

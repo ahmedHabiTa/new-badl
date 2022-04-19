@@ -9,12 +9,14 @@ class ProductItemWidget extends StatelessWidget {
   final String? title;
   final String? categoryName;
   final String? image;
+  final String type;
 
   const ProductItemWidget({
     Key? key,
     this.title,
     this.categoryName,
     this.image,
+    required this.type,
   }) : super(key: key);
 
   @override
@@ -165,7 +167,7 @@ class ProductItemWidget extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      CustomText(
+                      type != 'sold' ? Container():const CustomText(
                         text: 'تم التبادل',
                         fontSize: 10,
                         fontWeight: FontWeight.bold,

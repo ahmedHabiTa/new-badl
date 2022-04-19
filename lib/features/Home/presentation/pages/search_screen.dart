@@ -94,6 +94,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                     id: adProvider.searchedList[index].id,
                                     title: adProvider.searchedList[index].name,
                                     image: adProvider.searchedList[index].image,
+                                    type: adProvider.searchedList[index].type,
+                                    isFavourite: adProvider.searchedList[index].favoried,
+                                    categoryName: adProvider.adDetailsList![index].categoryName,
                                   );
                                 }),
                           ),

@@ -1,13 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:badl/core/util/shared_pref_helper.dart';
 import 'package:badl/models/ad_details_model.dart';
 import 'package:badl/models/latest_ads_model.dart';
+import 'package:badl/models/post_ad_offer_model.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/util/api_base_helper.dart';
+import '../../../models/post_ad_model.dart';
 
 class AdsProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -57,13 +61,13 @@ class AdsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   List<AdDetails> _searchedList = [];
 
   List<AdDetails> get searchedList => _searchedList;
+
   Future<void> searchAds({
-  required String name,
-}) async {
+    required String name,
+  }) async {
     isLoading = true;
 
     try {
@@ -73,10 +77,12 @@ class AdsProvider extends ChangeNotifier {
         List result = json.decode(response.body)['data']['data'];
         _adDetailsList =
             result.map((e) => AdDetails.fromJson(e)).cast<AdDetails>().toList();
-        _searchedList = _adDetailsList!.where((element) => element.name.contains(name)).toList();
+        _searchedList = _adDetailsList!
+            .where((element) => element.name.contains(name))
+            .toList();
         print(_searchedList.first.name);
       }
-      if(name.isEmpty){
+      if (name.isEmpty) {
         _searchedList.clear();
       }
     } catch (error) {
@@ -87,8 +93,9 @@ class AdsProvider extends ChangeNotifier {
   }
 
   File? image;
+
   Future pickImage({
-    required  ImageSource imageSource,
+    required ImageSource imageSource,
   }) async {
     try {
       final image = await ImagePicker().pickImage(source: imageSource);
@@ -102,5 +109,51 @@ class AdsProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> postAd({
+    required String name,
+    required String desc,
+    required String categoryId,
+    required String subCategoryId,
+  }) async {
+    isLoading = true;
+    final token = await SharedPrefsHelper.getData(key: 'token');
+    final imageUrl = await MultipartFile.fromFile(image!.path);
+    try {
+      final body = image != null
+          ? {
+              'name': name,
+              "desc": desc,
+              "category_id": categoryId,
+              "sub_category_id": subCategoryId,
+              //    "image" : imageUrl
+            }
+          : {
+              'name': name,
+              "desc": desc,
+              "category_id": categoryId,
+              "sub_category_id": subCategoryId,
+            };
+      final response =
+          await ApiBaseHelper.post(url: 'api/post-ad', body: body, headers: {
+        "Accept": "application/json",
+        "content-type": "application/json",
+        "Authorization": "Bearer $token"
+      });
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final result =
+            PostAdResponse.fromJson(json.decode(response.body)['data']);
+        print(result.image);
+      }
+    } catch (error) {
+      print("Error is : $error");
+      throw UnimplementedError();
+    }
+    isLoading = false;
+    image = null;
+    notifyListeners();
+  }
+
 
 }

@@ -26,6 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final name = SharedPrefsHelper.getData(key: 'username');
     final mobile = SharedPrefsHelper.getData(key: 'userMobile');
+    final token = SharedPrefsHelper.getData(key: 'token');
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -40,10 +41,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       body: SingleChildScrollView(
+        physics:const NeverScrollableScrollPhysics(),
         child: SizedBox(
           width: double.infinity,
-          height: 600.h,
-          child: Column(
+          height: 700.h,
+          child: token == "1"
+              ? const Center(
+                  child: CustomText(
+                    text: 'غير مصرح لك من فضلك سجل الدخول اولا',
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                )
+              : Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -69,12 +79,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             const Icon(
                               Icons.person,
                               color: MyColors.meanColor,
-                              size: 18,
+                              size: 22,
                             ),
                             const SizedBox(width: 10),
                             CustomText(
                               text: name ?? '',
-                              fontSize: 12,
+                              fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF4a4a4a),
                             ),
@@ -86,12 +96,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             const Icon(
                               Icons.add_call,
                               color: MyColors.meanColor,
-                              size: 18,
+                              size: 22,
                             ),
                             const SizedBox(width: 10),
                             CustomText(
                               text: mobile ?? '',
-                              fontSize: 12,
+                              fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF4a4a4a),
                             ),
@@ -136,6 +146,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         userProvider.adDetailsList![index].name,
                                     categoryName: userProvider
                                         .adDetailsList![index].categoryName,
+                                    image: userProvider
+                                        .adDetailsList![index].image,
+                                    type: userProvider
+                                        .adDetailsList![index].type,
                                   );
                                 },
                               ),

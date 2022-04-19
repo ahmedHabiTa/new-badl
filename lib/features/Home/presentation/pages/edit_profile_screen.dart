@@ -28,6 +28,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     // final username = SharedPrefsHelper.getData(key: 'username');
     final countryId = SharedPrefsHelper.getData(key: 'userCountryID');
+    final token = SharedPrefsHelper.getData(key: 'token');
     // final mobile = SharedPrefsHelper.getData(key: 'userMobile');
     // final image = SharedPrefsHelper.getData(key: 'image');
     Provider.of<UserProvider>(context, listen: false).getUserData();
@@ -56,7 +57,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: SizedBox(
             width: double.infinity,
             height: 600.h,
-            child: Consumer<UserProvider>(
+            child: token == "1" ? const Center(
+              child: CustomText(
+                text: 'غير مصرح لك من فضلك سجل الدخول اولا',
+                fontSize: 20,
+                color: Colors.black,
+              ),
+            ):Consumer<UserProvider>(
               builder: (context, userProvider, _) {
                 return userProvider.userProfile == null
                     ? const Center(

@@ -93,7 +93,7 @@ class AdDetails {
    required this.id,
     required this.name,
     required  this.price,
-    this.type,
+  required  this.type,
     required  this.userId,
     this.userImage,
     required  this.categoryName,
@@ -105,7 +105,7 @@ class AdDetails {
   int id;
   String name;
   String price;
-  String? type;
+  String type;
   int userId;
   dynamic userImage;
   String categoryName;
