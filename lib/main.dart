@@ -5,6 +5,7 @@ import 'package:badl/features/Home/provider/ads_provider.dart';
 import 'package:badl/features/Home/provider/category_provider.dart';
 import 'package:badl/features/auth/presentation/pages/phone_auth_screen.dart';
 import 'package:badl/features/auth/provider/auth_provider.dart';
+import 'package:badl/features/notifications/provider/notification_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,6 +59,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<UserProvider>(
           create: (_) => UserProvider()..getMyAds(),
+        ),
+        ChangeNotifierProvider<NotificationProvider>(
+          create: (_) => NotificationProvider()..getMyNotifications(),
         ),
       ],
       child: ScreenUtilInit(

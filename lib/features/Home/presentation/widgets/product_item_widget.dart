@@ -35,7 +35,7 @@ class ProductItemWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4.r),
                   image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: NetworkImage(image??
+                      image: NetworkImage(image ??
                           'https://images.unsplash.com/photo-1551582045-6ec9c11d8697?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80'))),
             ),
             const SizedBox(width: 10),
@@ -49,8 +49,8 @@ class ProductItemWidget extends StatelessWidget {
                     children: [
                       SizedBox(width: 10.w),
                       CustomText(
-                        text:title ?? 'شاحن سياره متنقل وشاحن متنقل',
-                        fontSize: 12,
+                        text: title ?? 'شاحن سياره متنقل وشاحن متنقل',
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: const Color(0xFF4a4a4a),
                       ),
@@ -130,22 +130,11 @@ class ProductItemWidget extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        CustomText(
-                          text: 'خدمات',
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF636363),
-                        ),
-                        const SizedBox(width: 25),
-                        CustomText(
-                          text:categoryName ?? 'القسم',
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF636363),
-                        ),
-                      ],
+                    child: CustomText(
+                      text: categoryName ?? 'القسم',
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF636363),
                     ),
                   ),
                   Row(
@@ -153,7 +142,11 @@ class ProductItemWidget extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Constants.navigateTo(
-                              routeName: ProductDetailsScreen(),
+                              routeName: ProductDetailsScreen(
+                                title: title!,
+                                categoryName: categoryName!,
+                                image: image!,
+                              ),
                               context: context);
                         },
                         child: Padding(
@@ -167,12 +160,14 @@ class ProductItemWidget extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      type != 'sold' ? Container():const CustomText(
-                        text: 'تم التبادل',
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: MyColors.meanColor,
-                      ),
+                      type != 'sold'
+                          ? Container()
+                          : const CustomText(
+                              text: 'تم التبادل',
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: MyColors.meanColor,
+                            ),
                       const SizedBox(width: 5),
                     ],
                   ),

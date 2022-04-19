@@ -56,7 +56,7 @@ class PostAdResponse {
   int? userId;
   String? slug;
   DateTime? updatedAt;
-  DateTime? createdAt;
+  String? createdAt;
   int id;
   bool favoried;
   String? image;
@@ -72,7 +72,7 @@ class PostAdResponse {
     userId: json["user_id"],
     slug: json["slug"],
     updatedAt: DateTime.parse(json["updated_at"]),
-    createdAt: DateTime.parse(json["created_at"]),
+    createdAt: json["created_at"],
     id: json["id"],
     favoried: json["favoried"],
     image: json["image"],
@@ -89,7 +89,7 @@ class PostAdResponse {
     "user_id": userId,
     "slug": slug,
     "updated_at": updatedAt?.toIso8601String(),
-    "created_at": createdAt?.toIso8601String(),
+    "created_at": createdAt ,
     "id": id,
     "favoried": favoried,
     "image": image,

@@ -126,7 +126,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                       }
                                     });
                                   },
-                                  child: Container(
+                                  child:currentIndex == 1 ?Container(): Container(
                                     width: 142.0.w,
                                     height: 50.0.h,
                                     decoration: BoxDecoration(
@@ -135,8 +135,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                           14.0.r),
                                     ),
                                     child: Center(
-                                      child: Text(
-                                        currentIndex == 3 ? "ابداى" : 'التالى',
+                                      child: Text('التالى',
                                         style: TextStyle(
                                           fontSize: 15.0.sp,
                                           color: Colors.white,

@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:badl/core/constants.dart';
 import 'package:badl/core/util/shared_pref_helper.dart';
 import 'package:badl/models/ad_details_model.dart';
 import 'package:badl/models/latest_ads_model.dart';
 import 'package:badl/models/post_ad_offer_model.dart';
-import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/util/api_base_helper.dart';
 import '../../../models/post_ad_model.dart';
+import 'package:http/http.dart' as http;
 
 class AdsProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -109,6 +111,12 @@ class AdsProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+  Future<String?> uploadImage({filepath, url}) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.files.add(await http.MultipartFile.fromPath('image', filepath));
+    var res = await request.send();
+    return res.reasonPhrase;
+  }
 
   Future<void> postAd({
     required String name,
@@ -118,22 +126,27 @@ class AdsProvider extends ChangeNotifier {
   }) async {
     isLoading = true;
     final token = await SharedPrefsHelper.getData(key: 'token');
-    final imageUrl = await MultipartFile.fromFile(image!.path);
+    final Map<String,dynamic> body ;
+    if(image !=null){
+      final imageUrl = await uploadImage(url: 'https://newsooq.waitbuzz.net/api/post-ad',filepath: image!.path);
+      body = {
+        'name': name,
+        "desc": desc,
+        "category_id": categoryId,
+        "sub_category_id": subCategoryId,
+        "image" : imageUrl
+      };
+      notifyListeners();
+    }else{
+      body = {
+        'name': name,
+        "desc": desc,
+        "category_id": categoryId,
+        "sub_category_id": subCategoryId,
+      };
+      notifyListeners();
+    }
     try {
-      final body = image != null
-          ? {
-              'name': name,
-              "desc": desc,
-              "category_id": categoryId,
-              "sub_category_id": subCategoryId,
-              //    "image" : imageUrl
-            }
-          : {
-              'name': name,
-              "desc": desc,
-              "category_id": categoryId,
-              "sub_category_id": subCategoryId,
-            };
       final response =
           await ApiBaseHelper.post(url: 'api/post-ad', body: body, headers: {
         "Accept": "application/json",
@@ -144,6 +157,7 @@ class AdsProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final result =
             PostAdResponse.fromJson(json.decode(response.body)['data']);
+        Constants.showToast(message: 'تم نشر الاعلان بنجاح..انتظر التأكيد', color: Colors.green);
         print(result.image);
       }
     } catch (error) {

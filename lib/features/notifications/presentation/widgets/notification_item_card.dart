@@ -11,8 +11,8 @@ class NotificationItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Constants.navigateTo(
-            routeName: NotificationDetailsScreen(), context: context);
+        // Constants.navigateTo(
+        //     routeName: NotificationDetailsScreen(), context: context);
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),

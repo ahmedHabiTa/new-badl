@@ -240,6 +240,8 @@ class MyProductsScreen extends StatelessWidget {
                                                       type: userProvider
                                                           .adDetailsList![index]
                                                           .type,
+
+
                                                     ),
                                                   );
                                                 },

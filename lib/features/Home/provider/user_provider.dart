@@ -12,6 +12,7 @@ import '../../../core/common_widgets/custom_dialog.dart';
 import '../../../core/util/api_base_helper.dart';
 import '../../../models/latest_ads_model.dart';
 import '../../../models/post_ad_offer_model.dart';
+import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -96,6 +97,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   File? image;
+  String? imageUrl;
 
   Future pickImage({
     required ImageSource imageSource,
@@ -113,30 +115,82 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleFavourite({required String id,required BuildContext context}) async {
+  Future<String?> uploadImage({filepath, url}) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.files.add(await http.MultipartFile.fromPath('image', filepath));
+    var res = await request.send();
+    return res.reasonPhrase;
+  }
+
+  Future<void> updateProfile({
+    required String name,
+  }) async {
     final token = await SharedPrefsHelper.getData(key: 'token');
-    if(token == '1'){
-     return CustomDialog.customDialog(context: context);
-    }else{
-      try{
+    final Map<String, dynamic> body;
+    print("image is : $image");
+    if (image == null) {
+      body = {
+        "name": name,
+      };
+    } else {
+      imageUrl = await uploadImage(
+          filepath: image!.path,
+          url: 'https://newsooq.waitbuzz.net/api/update/profile');
+      body = {
+        "name": name,
+        "image": imageUrl,
+      };
+    }
+    try {
+      final response = await ApiBaseHelper.post(
+        url: 'api/update/profile',
+        body: body,
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      print("statusCode is : ${response.statusCode}");
+      if(response.statusCode == 201){
+        final result = UserProfile.fromJson(json.decode(response.body)['data']);
+        userProfile = result;
+        await SharedPrefsHelper.saveData(key: 'username', value: name);
+        print(userProfile!.name);
+        notifyListeners();
+      }
+    } catch (error) {
+      print('profile error is : $error');
+      throw UnimplementedError();
+    }
+    notifyListeners();
+  }
+
+  Future<void> toggleFavourite(
+      {required String id, required BuildContext context}) async {
+    final token = await SharedPrefsHelper.getData(key: 'token');
+    if (token == '1') {
+      return CustomDialog.customDialog(context: context);
+    } else {
+      try {
         final response = await ApiBaseHelper.get(
           url: 'api/favourite/$id',
           headers: {
             "Accept": "application/json",
             "content-type": "application/json",
-            "Authorization" : "Bearer $token",
+            "Authorization": "Bearer $token",
           },
         );
 
         print("id is : $id");
-        print(response.statusCode );
+        print(response.statusCode);
 
-        if(response.statusCode == 200){
+        if (response.statusCode == 200) {
           final result = json.decode(response.body)['message'];
           Constants.showToast(message: result, color: Colors.white);
           print("result is : $result");
         }
-      }catch (error){
+      } catch (error) {
         print("Favourite error is : $error");
         throw UnimplementedError();
       }
@@ -149,9 +203,9 @@ class UserProvider extends ChangeNotifier {
     required BuildContext context,
   }) async {
     final token = await SharedPrefsHelper.getData(key: 'token');
-    if(token == "1"){
+    if (token == "1") {
       return CustomDialog.customDialog(context: context);
-    }else{
+    } else {
       try {
         final response = await ApiBaseHelper.post(
           url: 'api/post-offer',
@@ -167,7 +221,7 @@ class UserProvider extends ChangeNotifier {
         print("offerAdId is : $offerAdId");
         if (response.statusCode == 201) {
           final result =
-          PostAdOfferDetails.fromJson(json.decode(response.body)['data']);
+              PostAdOfferDetails.fromJson(json.decode(response.body)['data']);
           Constants.showToast(message: 'تم التبادل', color: Colors.green);
           print('result is : ${result.offerAdId}');
         }

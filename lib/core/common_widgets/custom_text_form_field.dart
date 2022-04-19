@@ -24,6 +24,7 @@ class CustomFormField extends StatefulWidget {
   final TextEditingController? controller;
   final EdgeInsets? contentPadding;
   final Color? backgroundColor;
+  final bool? readOnly;
 
   const CustomFormField(
       {Key? key,
@@ -45,6 +46,7 @@ class CustomFormField extends StatefulWidget {
       this.onChanged,
       this.contentPadding,
         this.backgroundColor,
+        this.readOnly,
       this.number = 0})
       : super(key: key);
 
@@ -72,6 +74,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
       width: widget.width ?? MediaQuery.of(context).size.width * 0.9,
       height: widget.height ?? MediaQuery.of(context).size.height * 0.1,
       child: TextFormField(
+        readOnly: widget.readOnly ?? false,
         initialValue: widget.initialValue,
         controller: widget.controller,
         onChanged: widget.onChanged,
